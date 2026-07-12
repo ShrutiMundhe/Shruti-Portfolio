@@ -394,6 +394,13 @@ export default function App() {
               >
                 Get in Touch
               </a>
+              <a 
+                href="/Shruti_Mundhe_Resume.pdf" 
+                download
+                className="border-2 border-line text-navy hover:border-navy px-8 py-3.5 transition-all rounded block cursor-pointer bg-transparent hover:bg-navy/5"
+              >
+                Download Resume
+              </a>
             </motion.div>
           </div>
 
