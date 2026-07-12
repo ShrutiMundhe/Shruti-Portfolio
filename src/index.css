@@ -1,24 +1,27 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Work+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
 @import "tailwindcss";
 
 @theme {
-  --color-cream: #F0E1DC;
-  --color-blush: #D9C0B9;
-  --color-mauve: #926F89;
-  --color-blue: #5670A3;
-  --color-navy: #181D45;
-  --color-primary: #5670A3;
-  --color-surface: #F0E1DC;
-  --color-accent: #D9C0B9;
+  --color-cream: #F2EEE5;
+  --color-surface: #FBF9F4;
+  --color-navy: #22262F;
+  --color-secondary: #5C6270;
+  --color-faint: #8B8F98;
+  --color-gold: #8B6B1F;
+  --color-gold-line: #C6AE7D;
+  --color-line: #DBD4C3;
+  --color-blue: #23324A;
+  --color-mauve: #8B6B1F;
 
-  --font-sans: "Inter", sans-serif;
-  --font-serif: "Cormorant Garamond", serif;
+  --font-sans: "Work Sans", sans-serif;
+  --font-serif: "Fraunces", serif;
+  --font-mono: "IBM Plex Mono", monospace;
 }
 
 body {
-  background-color: #F0E1DC;
-  color: #181D45;
+  background-color: #F2EEE5;
+  color: #22262F;
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
 }
@@ -28,16 +31,16 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Custom scrollbar to match minimalist theme */
+/* Custom scrollbar to match vintage editorial theme */
 ::-webkit-scrollbar {
   width: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: #F0E1DC;
+  background: #F2EEE5;
 }
 ::-webkit-scrollbar-thumb {
-  background: #D9C0B9;
+  background: #8B6B1F;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #926F89;
+  background: #C6AE7D;
 }

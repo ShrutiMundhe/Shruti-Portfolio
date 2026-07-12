@@ -49,7 +49,7 @@ const TechStack = ({ techStack }) => {
 
         return (
           <div key={key} className="space-y-3">
-            <h4 className="text-xs uppercase tracking-widest font-bold text-blue border-b border-blush/40 pb-1.5">
+            <h4 className="text-xs uppercase tracking-widest font-bold text-blue border-b border-navy/15 pb-1.5">
               {title}
             </h4>
             <ul className="space-y-2">
@@ -67,9 +67,30 @@ const TechStack = ({ techStack }) => {
   );
 };
 
+const SectionHeader = ({ num, title }) => (
+  <div className="text-center mb-16 space-y-2">
+    <span className="font-serif italic text-base text-gold block">{num}</span>
+    <h2 className="font-serif font-medium text-4xl md:text-5xl text-navy">{title}</h2>
+    <div className="flex items-center gap-4 max-w-[200px] mx-auto pt-2">
+      <div className="flex-1 h-[1px] bg-line" />
+      <div className="w-1.5 h-1.5 rounded-full bg-gold-line" />
+      <div className="flex-1 h-[1px] bg-line" />
+    </div>
+  </div>
+);
+
 export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [activeDeepDive, setActiveDeepDive] = useState(null);
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 40);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
   const [articles, setArticles] = useState([]);
   const [loadingArticles, setLoadingArticles] = useState(true);
 
@@ -138,7 +159,7 @@ export default function App() {
       id: 'futura',
       title: 'Futura',
       subtitle: 'MERN Stack Platform',
-      status: 'Ongoing',
+      status: 'In Development',
       statusColor: 'bg-blue text-cream border-blue',
       desc: 'An intelligent career guidance platform designed specifically for Indian graduates navigating the modern job landscape.',
       details: [
@@ -159,7 +180,7 @@ export default function App() {
       id: 'legal-reach',
       title: 'Legal Reach',
       subtitle: 'AI Consultancy Platform',
-      status: 'Completed March 2026',
+      status: 'Shipped (March 2026)',
       statusColor: 'bg-mauve text-cream border-mauve',
       desc: 'An automated legal workspace enabling high-precision consultancy, search, and dynamic workflow management.',
       details: [
@@ -180,7 +201,7 @@ export default function App() {
       id: 'rasa',
       title: 'Rasa',
       subtitle: 'Climate-Adaptive Beauty Intelligence',
-      status: 'Completed June 2026',
+      status: 'Shipped (June 2026)',
       statusColor: 'bg-mauve text-cream border-mauve',
       desc: 'A personalized beauty recommendations platform that adapts dynamically to environmental and local weather conditions.',
       details: [
@@ -278,62 +299,49 @@ export default function App() {
       {/* Editorial Grid Background overlay */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.03] bg-[linear-gradient(to_right,#181D45_1px,transparent_1px),linear-gradient(to_bottom,#181D45_1px,transparent_1px)] bg-[size:4rem_4rem]" />
 
-      {/* Header / Navigation (Deep Contrast: Dark Navy #181D45) */}
-      <header className="sticky top-0 z-50 bg-navy text-cream border-b border-[#252c64] px-6 lg:px-16 py-4 flex items-center justify-between shadow-md">
-        <a href="#" className="font-serif text-2xl font-bold tracking-tight select-none">
-          S.M.
-        </a>
-
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-10 text-xs uppercase tracking-widest font-semibold">
-          <a href="#projects" className="hover:text-blush transition-colors">Projects</a>
-          <a href="#insights" className="hover:text-blush transition-colors">Insights</a>
-          <a href="#publications" className="hover:text-blush transition-colors">Publications</a>
-          <a href="#experience" className="hover:text-blush transition-colors">Experience</a>
-          <a href="#skills" className="hover:text-blush transition-colors">Skills</a>
-          <a href="#contact" className="hover:text-blush transition-colors">Contact</a>
-        </nav>
-
-        {/* Action Button (Muted Blue #5670A3) */}
-        <div className="hidden md:block">
-          <a 
-            href="#contact" 
-            className="bg-blue hover:bg-blue/80 border border-[#252c64] text-cream px-5 py-2 text-xs uppercase tracking-widest font-semibold transition-all duration-300 rounded shadow-sm"
-          >
-            Get In Touch
+      {/* Navigation */}
+      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-5 ${
+        scrolled 
+          ? 'bg-cream/92 backdrop-blur-md border-b border-line shadow-sm py-3.5' 
+          : 'bg-transparent'
+      }`}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-16 flex items-center justify-between">
+          <a href="#" className="w-[38px] h-[38px] rounded-full border border-gold-line flex items-center justify-center font-serif italic text-sm text-gold select-none font-medium">
+            SM
           </a>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-7 font-mono text-[11px] tracking-wider uppercase">
+            <a href="#experience" className="text-secondary hover:text-navy transition-colors">Experience</a>
+            <a href="#projects" className="text-secondary hover:text-navy transition-colors">Work</a>
+            <a href="#skills" className="text-secondary hover:text-navy transition-colors">Skill Sets</a>
+            <a href="#insights" className="text-secondary hover:text-navy transition-colors">Insights</a>
+            <a href="#publications" className="text-secondary hover:text-navy transition-colors">Publications</a>
+            <a href="#contact" className="text-secondary hover:text-navy transition-colors">Contact Me</a>
+          </div>
+
+          <button 
+            className="md:hidden border border-line rounded px-3 py-1.5 font-mono text-[11px] text-navy cursor-pointer"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            Menu
+          </button>
         </div>
+      </nav>
 
-        {/* Mobile Navigation Toggle */}
-        <button 
-          className="md:hidden p-1 hover:bg-[#252c64] transition-colors rounded text-cream"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          aria-label="Toggle navigation menu"
-        >
-          {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
-      </header>
-
-      {/* Mobile Menu (Navy) */}
+      {/* Mobile Menu */}
       {mobileMenuOpen && (
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="fixed inset-x-0 top-[65px] bg-navy text-cream border-b border-[#252c64] z-40 p-8 flex flex-col space-y-6 text-sm uppercase tracking-widest font-bold md:hidden shadow-lg"
+          className="fixed inset-x-0 top-[70px] bg-surface text-navy border-b border-line z-40 p-8 flex flex-col space-y-4 font-mono text-[11px] tracking-wider uppercase md:hidden shadow-lg"
         >
-          <a href="#projects" onClick={() => setMobileMenuOpen(false)} className="py-2 hover:text-blush">Projects</a>
-          <a href="#insights" onClick={() => setMobileMenuOpen(false)} className="py-2 hover:text-blush">Insights</a>
-          <a href="#publications" onClick={() => setMobileMenuOpen(false)} className="py-2 hover:text-blush">Publications</a>
-          <a href="#experience" onClick={() => setMobileMenuOpen(false)} className="py-2 hover:text-blush">Experience</a>
-          <a href="#skills" onClick={() => setMobileMenuOpen(false)} className="py-2 hover:text-blush">Skills</a>
-          <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="py-2 hover:text-blush">Contact</a>
-          <a 
-            href="#contact" 
-            onClick={() => setMobileMenuOpen(false)} 
-            className="bg-blue text-center py-3 text-xs uppercase tracking-widest font-semibold hover:bg-blue/90 transition-all rounded"
-          >
-            Get In Touch
-          </a>
+          <a href="#experience" onClick={() => setMobileMenuOpen(false)} className="hover:text-gold py-1">Experience</a>
+          <a href="#projects" onClick={() => setMobileMenuOpen(false)} className="hover:text-gold py-1">Work</a>
+          <a href="#skills" onClick={() => setMobileMenuOpen(false)} className="hover:text-gold py-1">Skill Sets</a>
+          <a href="#insights" onClick={() => setMobileMenuOpen(false)} className="hover:text-gold py-1">Insights</a>
+          <a href="#publications" onClick={() => setMobileMenuOpen(false)} className="hover:text-gold py-1">Publications</a>
+          <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="hover:text-gold py-1">Contact Me</a>
         </motion.div>
       )}
 
@@ -346,48 +354,50 @@ export default function App() {
           initial="initial"
           animate="animate"
           variants={stagger}
-          className="border-b border-blush/40 pb-16 md:pb-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"
+          className="border-b border-navy/15 pb-16 md:pb-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"
         >
-          <div className="lg:col-span-8 space-y-6">
+          <div className="lg:col-span-8 space-y-6 text-center lg:text-left">
+
             <motion.span 
               variants={fadeInUp}
-              className="text-xs uppercase tracking-[0.2em] font-bold text-mauve block"
+              className="font-mono text-[11px] tracking-widest text-faint uppercase block"
             >
-              Available for Opportunities
+              Full-Stack Developer · India
             </motion.span>
             
             <motion.h1 
               variants={fadeInUp}
-              className="font-serif text-5xl md:text-7xl lg:text-8xl tracking-tight leading-[1.05] text-navy font-bold"
+              className="font-serif text-5xl md:text-7xl lg:text-8xl tracking-tight leading-[1.05] text-navy font-medium"
             >
-              Shruti Mundhe.
+              Shruti <span className="italic font-normal text-gold">Mundhe</span>
             </motion.h1>
             
             <motion.p 
               variants={fadeInUp}
-              className="text-lg md:text-2xl text-navy/90 font-light leading-relaxed max-w-3xl"
+              className="text-lg md:text-2xl text-secondary font-light leading-relaxed max-w-3xl"
             >
-              Full-stack developer specializing in production-grade MERN stack applications and AI-integrated solutions. Passionate about building technology that solves real-world problems.
+              Building considered, production-grade software — from MongoDB schema to the interface people actually touch.
             </motion.p>
 
-            <motion.div variants={fadeInUp} className="pt-4 flex flex-wrap gap-4">
+            <motion.div variants={fadeInUp} className="w-[44px] h-[1px] bg-gold-line mx-auto lg:mx-0 my-6" />
+
+            <motion.div variants={fadeInUp} className="pt-4 flex flex-wrap gap-4 justify-center lg:justify-start font-mono text-[11px] tracking-wider uppercase">
               <a 
                 href="#projects" 
-                className="bg-blue text-cream px-6 py-3.5 text-xs uppercase tracking-widest font-semibold hover:bg-blue/90 transition-colors flex items-center gap-2 group rounded shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all"
+                className="bg-navy hover:bg-gold border border-navy hover:border-gold text-cream px-8 py-3.5 transition-all rounded block hover:shadow-md cursor-pointer"
               >
-                View Selected Work 
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                View the Work
               </a>
               <a 
-                href="#experience" 
-                className="border border-mauve text-navy px-6 py-3.5 text-xs uppercase tracking-widest font-semibold hover:bg-blush/20 transition-all rounded"
+                href="#contact" 
+                className="border-2 border-line text-navy hover:border-navy px-8 py-3.5 transition-all rounded block cursor-pointer bg-transparent"
               >
-                Read Experience
+                Get in Touch
               </a>
             </motion.div>
           </div>
 
-          <div className="lg:col-span-4 lg:border-l lg:border-blush/40 lg:pl-8 pt-8 lg:pt-0 space-y-6 text-sm text-navy/80">
+          <div className="lg:col-span-4 lg:border-l lg:border-navy/15 lg:pl-8 pt-8 lg:pt-0 space-y-6 text-sm text-navy/80">
             <div>
               <h4 className="font-serif text-navy font-bold text-lg mb-1">Based In</h4>
               <p>India — Open to Remote Work</p>
@@ -397,31 +407,58 @@ export default function App() {
               <p>MERN Development, SaaS Architecture, RAG, Generative AI Integration</p>
             </div>
             <div className="flex gap-4 pt-2">
-              <a href="https://github.com/shrutimundhe" target="_blank" rel="noopener noreferrer" className="p-2 border border-blush hover:border-navy text-navy hover:bg-blush/20 rounded-full transition-all">
+              <a href="https://github.com/shrutimundhe" target="_blank" rel="noopener noreferrer" className="p-2 border border-navy/20 hover:border-navy text-navy hover:bg-navy/5 rounded-full transition-all">
                 <GithubIcon className="w-4 h-4" />
               </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="p-2 border border-blush hover:border-navy text-navy hover:bg-blush/20 rounded-full transition-all">
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="p-2 border border-navy/20 hover:border-navy text-navy hover:bg-navy/5 rounded-full transition-all">
                 <LinkedinIcon className="w-4 h-4" />
               </a>
-              <a href="mailto:shrutimundhe22@gmail.com" className="p-2 border border-blush hover:border-navy text-navy hover:bg-blush/20 rounded-full transition-all">
+              <a href="mailto:shrutimundhe22@gmail.com" className="p-2 border border-navy/20 hover:border-navy text-navy hover:bg-navy/5 rounded-full transition-all">
                 <Mail className="w-4 h-4" />
               </a>
             </div>
           </div>
         </motion.section>
+        <section id="experience" className="space-y-12 border-t border-navy/15 pt-16 max-w-3xl mx-auto w-full">
+          <SectionHeader num="I" title="Experience" />
 
+          <div className="space-y-12">
+            {experiences.map((exp, idx) => (
+              <motion.div 
+                key={idx}
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="space-y-4 border-l-2 border-navy pl-6 md:pl-8 relative"
+              >
+                <div className="absolute w-3.5 h-3.5 bg-navy rounded-full -left-[8px] top-1.5" />
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
+                  <div>
+                    <h3 className="font-serif text-2xl font-bold text-navy">{exp.role}</h3>
+                    <p className="text-sm font-semibold tracking-wider uppercase text-mauve">{exp.company}</p>
+                  </div>
+                  <span className="text-xs uppercase tracking-widest font-bold px-3 py-1 bg-navy/5 border border-navy/10 text-navy w-fit rounded-full">
+                    {exp.duration}
+                  </span>
+                </div>
+                <p className="text-sm text-navy/90 font-light leading-relaxed">{exp.description}</p>
+                <ul className="space-y-2 pt-2">
+                  {exp.bullets.map((bullet, bIdx) => (
+                    <li key={bIdx} className="text-xs text-navy/80 flex items-start gap-2 leading-relaxed">
+                      <span className="text-mauve font-semibold mt-0.5">•</span>
+                      <span>{bullet}</span>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            ))}
+          </div>
+        </section>
 
         {/* PROJECTS SECTION */}
-        <section id="projects" className="space-y-12">
-          <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-blush/40 pb-6">
-            <div className="space-y-2">
-              <span className="text-xs uppercase tracking-[0.2em] font-bold text-mauve">Selected Case Studies</span>
-              <h2 className="font-serif text-4xl md:text-5xl font-light text-navy">Featured Work</h2>
-            </div>
-            <div className="text-xs uppercase tracking-widest text-mauve mt-4 md:mt-0 font-medium">
-              Curated Production-Grade Apps
-            </div>
-          </div>
+        <section id="projects" className="space-y-12 border-t border-navy/15 pt-16">
+          <SectionHeader num="II" title="Selected Work" />
 
           {/* 3 Project Cards grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -432,7 +469,7 @@ export default function App() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.6, delay: idx * 0.1 }}
-                className="group flex flex-col justify-between p-8 border-2 border-navy bg-cream hover:-translate-y-2 hover:shadow-[0_12px_24px_rgba(24,29,69,0.1)] transition-all duration-300 rounded-lg min-h-[460px] relative overflow-hidden"
+                className="group flex flex-col justify-between p-8 border-2 border-navy bg-surface hover:-translate-y-2 hover:shadow-[0_12px_24px_rgba(24,29,69,0.1)] transition-all duration-300 rounded-lg min-h-[460px] relative overflow-hidden"
               >
                 {/* Visual subtle card pattern */}
                 <div className="absolute top-0 right-0 p-4 opacity-25 group-hover:opacity-50 transition-opacity duration-300">
@@ -466,28 +503,28 @@ export default function App() {
                   {/* Tag List */}
                   <div className="flex flex-wrap gap-2 mb-6">
                     {project.tags.map((tag) => (
-                      <span key={tag} className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 bg-blush/30 text-navy border border-navy/10 rounded">
+                      <span key={tag} className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 bg-navy/5 text-navy border border-navy/10 rounded">
                         {tag}
                       </span>
                     ))}
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-2 gap-3 font-mono text-[11px] tracking-wider uppercase">
                     <a 
                       href={project.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-center border-2 border-navy text-navy py-2.5 text-xs font-bold uppercase tracking-wider transition-all rounded block hover:bg-navy hover:text-cream"
+                      className="text-center border-2 border-navy text-navy py-2.5 transition-all rounded block hover:bg-navy hover:text-cream"
                     >
                       Repository
                     </a>
                     <button 
                       onClick={() => setActiveDeepDive(activeDeepDive === project.id ? null : project.id)}
-                      className={`text-center py-2.5 text-xs font-bold uppercase tracking-wider transition-all rounded block cursor-pointer border-2 ${
+                      className={`text-center py-2.5 transition-all rounded block cursor-pointer border-2 ${
                         activeDeepDive === project.id 
-                          ? 'bg-navy text-cream border-navy' 
-                          : 'bg-blue hover:bg-blue/90 text-cream hover:shadow-md border-blue'
+                          ? 'bg-gold text-cream border-gold' 
+                          : 'bg-navy hover:bg-gold text-cream hover:shadow-md border-navy hover:border-gold'
                       }`}
                     >
                       {activeDeepDive === project.id ? 'Close' : 'Deep-Dive'}
@@ -507,7 +544,7 @@ export default function App() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -15 }}
                 transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                className="w-full border-2 border-navy bg-cream p-8 rounded-lg shadow-md relative overflow-hidden"
+                className="w-full border-2 border-navy bg-surface p-8 rounded-lg shadow-md relative overflow-hidden"
               >
                 <div className="flex items-center justify-between border-b border-navy/20 pb-4 mb-6">
                   <div>
@@ -529,19 +566,77 @@ export default function App() {
           </AnimatePresence>
         </section>
 
+        {/* SKILLS SECTION */}
+        <section id="skills" className="space-y-12 border-t border-navy/15 pt-16">
+          <SectionHeader num="III" title="Skill Sets" />
+
+          {/* Clean Grid Layout for Skills */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {skillCategories.map((category, idx) => (
+              <motion.div 
+                key={category.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                className="p-6 border border-navy/20 hover:border-navy bg-surface hover:shadow-[0_8px_16px_rgba(24,29,69,0.05)] rounded-lg transition-all duration-300"
+              >
+                <div className="flex items-center gap-3 border-b border-navy/10 pb-4 mb-4">
+                  <div className="p-2 bg-navy/5 rounded text-mauve">
+                    {category.icon}
+                  </div>
+                  <h3 className="font-serif text-xl font-bold text-navy">{category.title}</h3>
+                </div>
+                <ul className="space-y-2.5">
+                  {category.items.map((item) => (
+                    <li key={item} className="text-xs text-navy/80 flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 bg-mauve rounded-full" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* SOFT SKILLS SECTION */}
+        <section id="soft-skills" className="space-y-12 border-t border-navy/15 pt-16">
+          <SectionHeader num="III-B" title="Professional Practices" />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {softSkills.map((skill, idx) => (
+              <motion.div 
+                key={skill.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                className="p-6 border border-navy/10 hover:border-navy bg-surface hover:shadow-[0_8px_16px_rgba(24,29,69,0.05)] rounded-lg transition-all duration-300 flex flex-col justify-between"
+              >
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2.5 bg-navy/5 rounded">
+                      {skill.icon}
+                    </div>
+                    <h3 className="font-serif text-xl font-bold text-navy leading-tight">{skill.title}</h3>
+                  </div>
+                  <p className="text-xs text-navy/80 leading-relaxed font-light">{skill.desc}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
 
         {/* INSIGHTS & ARTICLES SECTION */}
-        <section id="insights" className="space-y-12 border-t border-blush/40 pt-16">
-          <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-blush/40 pb-6">
-            <div className="space-y-2">
-              <span className="text-xs uppercase tracking-[0.2em] font-bold text-mauve">Technical Writing & Thoughts</span>
-              <h2 className="font-serif text-4xl md:text-5xl font-light text-navy">Insights & Articles</h2>
-            </div>
+        <section id="insights" className="space-y-12 border-t border-navy/15 pt-16">
+          <SectionHeader num="IV" title="Insights & Articles" />
+          <div className="text-center -mt-8 mb-6">
             <a 
               href="https://medium.com/@shrutimundhe22"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs uppercase tracking-widest text-blue hover:text-navy transition-colors font-bold flex items-center gap-1 mt-4 md:mt-0"
+              className="text-xs uppercase tracking-widest text-gold hover:text-navy transition-colors font-bold inline-flex items-center gap-1 font-mono"
             >
               View Medium Profile <ArrowRight className="w-4 h-4" />
             </a>
@@ -561,7 +656,7 @@ export default function App() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-100px" }}
                   transition={{ duration: 0.6, delay: idx * 0.1 }}
-                  className="group flex flex-col justify-between p-8 border-2 border-navy bg-cream hover:-translate-y-2 hover:shadow-[0_12px_24px_rgba(24,29,69,0.1)] transition-all duration-300 rounded-lg min-h-[320px] relative overflow-hidden"
+                  className="group flex flex-col justify-between p-8 border-2 border-navy bg-surface hover:-translate-y-2 hover:shadow-[0_12px_24px_rgba(24,29,69,0.1)] transition-all duration-300 rounded-lg min-h-[320px] relative overflow-hidden"
                 >
                   <div className="space-y-4 relative z-10">
                     <div className="border-b border-navy/10 pb-3">
@@ -582,7 +677,7 @@ export default function App() {
                       href={article.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full text-center bg-blue hover:bg-blue/95 text-cream py-2.5 text-xs font-bold uppercase tracking-wider hover:shadow-md transition-all rounded block"
+                      className="w-full text-center bg-navy hover:bg-gold border border-navy hover:border-gold text-cream py-2.5 font-mono text-[11px] tracking-wider uppercase hover:shadow-md transition-all rounded block"
                     >
                       Read on Medium
                     </a>
@@ -593,20 +688,16 @@ export default function App() {
           )}
         </section>
 
-
         {/* RESEARCH & PUBLICATIONS SECTION */}
-        <section id="publications" className="space-y-12 border-t border-blush/40 pt-16">
-          <div className="space-y-2 border-b border-blush/40 pb-6">
-            <span className="text-xs uppercase tracking-[0.2em] font-bold text-mauve">Academic Writing & Research</span>
-            <h2 className="font-serif text-4xl md:text-5xl font-light text-navy">Research & Publications</h2>
-          </div>
+        <section id="publications" className="space-y-12 border-t border-navy/15 pt-16">
+          <SectionHeader num="V" title="Research & Publications" />
 
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="p-8 md:p-10 border-2 border-navy bg-cream rounded-lg shadow-sm hover:shadow-[0_12px_24px_rgba(24,29,69,0.08)] transition-all duration-300 relative overflow-hidden"
+            className="p-8 md:p-10 border-2 border-navy bg-surface rounded-lg shadow-sm hover:shadow-[0_12px_24px_rgba(24,29,69,0.08)] transition-all duration-300 relative overflow-hidden"
           >
             <div className="absolute top-0 right-0 p-6 opacity-10">
               <FileText className="w-24 h-24 text-navy" />
@@ -614,7 +705,7 @@ export default function App() {
 
             <div className="space-y-6 relative z-10 max-w-4xl">
               <div>
-                <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 bg-blush/40 text-navy border border-navy/10 rounded">
+                <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 bg-navy/5 text-navy border border-navy/10 rounded">
                   IJIRT Journal — April 2026
                 </span>
                 <h3 className="font-serif text-2xl md:text-3xl font-bold tracking-tight text-navy mt-4 leading-tight">
@@ -634,10 +725,10 @@ export default function App() {
 
               <div className="pt-4">
                 <a 
-                  href="https://github.com/shrutimundhe/legal-reach/blob/main/Legalreach_Research_Paper.pdf"
+                  href="https://github.com/ShrutiMundhe/Shruti-Portfolio/blob/main/IJIRT196404_PAPER%20(1).pdf"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block bg-blue hover:bg-blue/95 text-cream px-8 py-3.5 text-xs font-bold uppercase tracking-wider hover:shadow-md transition-all rounded"
+                  className="inline-block bg-navy hover:bg-gold border-2 border-navy hover:border-gold text-cream px-8 py-3.5 font-mono text-[11px] tracking-wider uppercase hover:shadow-md transition-all rounded"
                 >
                   View Publication
                 </a>
@@ -646,134 +737,12 @@ export default function App() {
           </motion.div>
         </section>
 
+        {/* CONTACT / CONTACT ME */}
+        <section id="contact" className="border-t border-navy/15 pt-16 pb-8 space-y-16 max-w-3xl mx-auto w-full">
+          <SectionHeader num="VI" title="Contact Me" />
 
-        {/* EXPERIENCE SECTION */}
-        <section id="experience" className="grid grid-cols-1 lg:grid-cols-12 gap-8 border-t border-blush/40 pt-16">
-          <div className="lg:col-span-4 space-y-4">
-            <span className="text-xs uppercase tracking-[0.2em] font-bold text-mauve">Background</span>
-            <h2 className="font-serif text-4xl md:text-5xl font-light text-navy">Experience</h2>
-            <p className="text-sm text-navy/80 font-light leading-relaxed pr-6">
-              A record of engineering stable backends, interactive frontends, and participating actively in modern agile workflows.
-            </p>
-          </div>
-
-          <div className="lg:col-span-8 space-y-12">
-            {experiences.map((exp, idx) => (
-              <motion.div 
-                key={idx}
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="space-y-4 border-l-2 border-navy pl-6 md:pl-8 relative"
-              >
-                <div className="absolute w-3.5 h-3.5 bg-navy rounded-full -left-[8px] top-1.5" />
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
-                  <div>
-                    <h3 className="font-serif text-2xl font-bold text-navy">{exp.role}</h3>
-                    <p className="text-sm font-semibold tracking-wider uppercase text-mauve">{exp.company}</p>
-                  </div>
-                  <span className="text-xs uppercase tracking-widest font-bold px-3 py-1 bg-blush/20 border border-blush text-navy w-fit rounded-full">
-                    {exp.duration}
-                  </span>
-                </div>
-                <p className="text-sm text-navy/90 font-light leading-relaxed">{exp.description}</p>
-                <ul className="space-y-2 pt-2">
-                  {exp.bullets.map((bullet, bIdx) => (
-                    <li key={bIdx} className="text-xs text-navy/80 flex items-start gap-2 leading-relaxed">
-                      <span className="text-mauve font-semibold mt-0.5">•</span>
-                      <span>{bullet}</span>
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
-
-        {/* SKILLS SECTION */}
-        <section id="skills" className="space-y-12 border-t border-blush/40 pt-16">
-          <div className="space-y-2 text-center md:text-left">
-            <span className="text-xs uppercase tracking-[0.2em] font-bold text-mauve">Technical Arsenal</span>
-            <h2 className="font-serif text-4xl md:text-5xl font-light text-navy">Skills & Capabilities</h2>
-          </div>
-
-          {/* Clean Grid Layout for Skills */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {skillCategories.map((category, idx) => (
-              <motion.div 
-                key={category.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
-                className="p-6 border border-blush hover:border-navy bg-cream hover:shadow-[0_8px_16px_rgba(24,29,69,0.05)] rounded-lg transition-all duration-300"
-              >
-                <div className="flex items-center gap-3 border-b border-blush pb-4 mb-4">
-                  <div className="p-2 bg-blush/20 rounded text-mauve">
-                    {category.icon}
-                  </div>
-                  <h3 className="font-serif text-xl font-bold text-navy">{category.title}</h3>
-                </div>
-                <ul className="space-y-2.5">
-                  {category.items.map((item) => (
-                    <li key={item} className="text-xs text-navy/80 flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 bg-mauve rounded-full" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
-
-        {/* SOFT SKILLS SECTION */}
-        <section id="soft-skills" className="space-y-12 border-t border-blush/40 pt-16">
-          <div className="space-y-2 text-center md:text-left">
-            <span className="text-xs uppercase tracking-[0.2em] font-bold text-mauve">Execution & Delivery</span>
-            <h2 className="font-serif text-4xl md:text-5xl font-light text-navy">Professional Practices</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {softSkills.map((skill, idx) => (
-              <motion.div 
-                key={skill.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
-                className="p-6 border border-blush hover:border-navy bg-cream hover:shadow-[0_8px_16px_rgba(24,29,69,0.05)] rounded-lg transition-all duration-300 flex flex-col justify-between"
-              >
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2.5 bg-blush/20 rounded">
-                      {skill.icon}
-                    </div>
-                    <h3 className="font-serif text-xl font-bold text-navy leading-tight">{skill.title}</h3>
-                  </div>
-                  <p className="text-xs text-navy/80 leading-relaxed font-light">{skill.desc}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-
-
-        {/* CONTACT / CALL TO ACTION */}
-        <section id="contact" className="border-t border-blush/40 pt-16 pb-8 space-y-16">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <div className="lg:col-span-7 space-y-6">
-              <span className="text-xs uppercase tracking-[0.2em] font-bold text-mauve">Let's Connect</span>
-              <h2 className="font-serif text-4xl md:text-6xl font-light tracking-tight text-navy">Let's build something exceptional together.</h2>
-              <p className="text-sm text-navy/80 font-light leading-relaxed max-w-lg">
-                I am interested in full-time opportunities, high-impact collaborations, and AI-powered product development. Reach out and I'll get back to you within 24 hours.
-              </p>
-            </div>
-
-            <div className="lg:col-span-5 flex flex-col justify-center space-y-6 lg:border-l lg:border-blush/40 lg:pl-12">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center justify-center">
+            <div className="md:col-span-12 flex flex-col justify-center space-y-6">
               <a 
                 href="https://mail.google.com/mail/?view=cm&fs=1&to=shrutimundhe22@gmail.com" 
                 target="_blank"
@@ -792,7 +761,7 @@ export default function App() {
                   href="https://github.com/shrutimundhe" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 border border-blush hover:border-navy p-4 text-xs font-semibold uppercase tracking-wider hover:bg-blush/20 text-navy transition-all rounded"
+                  className="flex items-center gap-3 border border-navy/20 hover:border-navy p-4 text-xs font-semibold uppercase tracking-wider hover:bg-navy/5 text-navy transition-all rounded"
                 >
                   <GithubIcon className="w-4 h-4 text-mauve" />
                   GitHub Profile
@@ -801,7 +770,7 @@ export default function App() {
                   href="https://linkedin.com" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 border border-blush hover:border-navy p-4 text-xs font-semibold uppercase tracking-wider hover:bg-blush/20 text-navy transition-all rounded"
+                  className="flex items-center gap-3 border border-navy/20 hover:border-navy p-4 text-xs font-semibold uppercase tracking-wider hover:bg-navy/5 text-navy transition-all rounded"
                 >
                   <LinkedinIcon className="w-4 h-4 text-mauve" />
                   LinkedIn Profile
@@ -820,11 +789,11 @@ export default function App() {
             &copy; {new Date().getFullYear()} Shruti Mundhe. All rights reserved.
           </div>
           <div className="flex gap-6 font-medium">
-            <a href="#projects" className="hover:text-blush">Projects</a>
-            <a href="#insights" className="hover:text-blush">Insights</a>
-            <a href="#publications" className="hover:text-blush">Publications</a>
-            <a href="#experience" className="hover:text-blush">Experience</a>
-            <a href="#skills" className="hover:text-blush">Skills</a>
+            <a href="#experience" className="hover:text-mauve">Experience</a>
+            <a href="#projects" className="hover:text-mauve">Work</a>
+            <a href="#skills" className="hover:text-mauve">Skill Sets</a>
+            <a href="#insights" className="hover:text-mauve">Insights</a>
+            <a href="#publications" className="hover:text-mauve">Publications</a>
           </div>
         </div>
       </footer>
